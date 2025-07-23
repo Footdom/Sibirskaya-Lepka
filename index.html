@@ -317,7 +317,7 @@
       modalBg.style.display = 'flex';
       document.getElementById('orderForm').onsubmit = sendOrder;
 
-      // --- Карта Google Maps ---
+      // --- Карта Google Maps с определением местоположения ---
       const showMapBtn = document.getElementById('showMapBtn');
       const mapContainer = document.getElementById('mapContainer');
       const gmapFrame = document.getElementById('gmapFrame');
@@ -325,7 +325,20 @@
         showMapBtn.onclick = function() {
           mapContainer.style.display = mapContainer.style.display === 'none' ? 'block' : 'none';
           if (mapContainer.style.display === 'block') {
-            gmapFrame.src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1998.617839964971!2d82.9204303161167!3d55.03019998037237!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x42d4e4c2d7e6e6b1%3A0x2b2b2b2b2b2b2b2b!2z0J3QsNC30LDRgNCw0LvRjNC90YvQuSDQv9C-0YHRgtCw0L3QuNC5INC60L7QvNC_0L7QstCw0YAg0JrQvtC80L7QstCw0YAg0JzQvtGB0YLQsNC30LjQvdCw!5e0!3m2!1sru!2sru!4v1680000000000!5m2!1sru!2sru";
+            if (navigator.geolocation) {
+              showMapBtn.textContent = "⏳";
+              navigator.geolocation.getCurrentPosition(function(pos) {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                gmapFrame.src = `https://www.google.com/maps?q=${lat},${lng}&z=16&output=embed`;
+                showMapBtn.textContent = "📍";
+              }, function() {
+                gmapFrame.src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1998.617839964971!2d82.9204303161167!3d55.03019998037237!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x42d4e4c2d7e6e6b1%3A0x2b2b2b2b2b2b2b2b!2z0J3QsNC30LDRgNCw0LvRjNC90YvQuSDQv9C-0YHRgtCw0L3QuNC5INC60L7QvNC_0L7QstCw0YAg0JrQvtC80L7QstCw0YAg0JzQvtGB0YLQsNC30LjQvdCw!5e0!3m2!1sru!2sru!4v1680000000000!5m2!1sru!2sru";
+                showMapBtn.textContent = "📍";
+              });
+            } else {
+              gmapFrame.src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1998.617839964971!2d82.9204303161167!3d55.03019998037237!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x42d4e4c2d7e6e6b1%3A0x2b2b2b2b2b2b2b2b!2z0J3QsNC30LDRgNCw0LvRjNC90YvQuSDQv9C-0YHRgtCw0L3QuNC5INC60L7QvNC_0L7QstCw0YAg0JrQvtC80L7QstCw0YAg0JzQvtGB0YLQsNC30LjQvdCw!5e0!3m2!1sru!2sru!4v1680000000000!5m2!1sru!2sru";
+            }
           }
         };
       }
